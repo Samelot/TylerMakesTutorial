@@ -9,3 +9,9 @@ BulbMap = class(function(c, width, height, rows, columns)
     c.tileSize = c.height/rows
     c.layers = {}
 end)
+
+function BulbMap:create(group)
+end
+
+function BulbMap:removeSelf()
+end

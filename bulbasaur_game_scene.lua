@@ -1,11 +1,14 @@
-require("bulb_map")
-local composer = require( "composer" )
+require("bulb_game")
+
+local composer = require("composer")
 local scene = composer.newScene()
 
-local character = nil
-local destination = nil
-local moveSpeed = 100
-i = 30
+--local character = nil
+--local destination = nil
+--local moveSpeed = 100
+--i = 30
+
+local game 
 
 --local function onEnterFrame()
 --    if(i <= 0) then
@@ -30,6 +33,8 @@ i = 30
 
 function scene:create( event )
     local group = self.view
+    local game = BulbGame(display.contentWidth, display.contentHeight)
+    game:create(group)
 
 --    local background = display.newRect(0, 0, display.contentWidth, display.contentHeight)
 --    background:setFillColor(.16)
