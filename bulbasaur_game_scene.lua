@@ -40,30 +40,10 @@ function scene:create( event )
 --    background:setFillColor(.16)
 --    background.anchorX = 0
 --    background.anchorY = 0
---
---    character = display.newRect(0, 0, 40, 40)
---    character:setFillColor(0.7, 1, 0.7 )
---    character:setStrokeColor(0, 0, 0)
---    character.anchorX = 0
---    character.anchorY = 0
---
---    destination = display.newRect(0, 0, 10, 10)
---    destination:setFillColor(1, 0, 0)
---    destination.anchorX = 0
---    destination.anchorY = 0
---
 --    group:insert(background)
 --    group:insert(character)
 --    group:insert(destination)
 --
---    local function moveBlock( event )
---        if (event.phase == "began") then
---            destination.x = event.x
---            destination.y = event.y
---        end
---        print("destination:", destination.x, ":", destination.y)
---        return true
---    end
 --
 --    Runtime:addEventListener( "enterFrame", onEnterFrame )
 --    group:addEventListener("touch", moveBlock)
@@ -83,6 +63,10 @@ end
 
 function scene:destroy( event )
     local group = self.view
+
+    if(game) then
+        game:removeSelf()
+    end
 end
 
 -----
