@@ -1,12 +1,16 @@
+-- bulb_store_item
+
 require("class")
 
-BulbStoreItem = class(function(c, x, y, width, height, itemType)
+BulbStoreItem = class(function(c, x, y, width, height, itemType, ui)
     c.x = x
     c.y = y
     c.width = width
     c.height = height
     c.itemType = itemType
     c.itemView = nil
+    c.ui = ui
+    c.events = {}
 end)
 
 function BulbStoreItem:create(group)
@@ -29,7 +33,7 @@ function BulbStoreItem:touch(event)
     if (event.phase == "began") then
         destination.x = event.x
         destination.y = event.y
-        print("clicking:", self.itemType, bulbGameSettings.types[self.itemType].tileName, bulbGameSettings.types[self.itemType].cost)
+       
+        self.ui:plantingFunction(self.itemType)
     end
 end
-
