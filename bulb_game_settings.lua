@@ -17,4 +17,3 @@ end)
 
 --function BulbGameSettings:setupFromData()
 --end
-

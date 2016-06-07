@@ -3,6 +3,7 @@
 require("class")
 require("bulb_map")
 require("bulb_ui")
+require("bulb_player")
 
 -- init function
 -- when initialized from bulbasaur_game_scene, automatically has access to self var
@@ -25,12 +26,14 @@ function BulbGame:create(group)
     local mapWidth = self.width/5*4
     local columns = math.floor(mapWidth/size)
 
+    self.player = BulbPlayer()
+
     self.map = BulbMap(self.width, self.height, rows, columns)
     self.map:create(group)
     self.map:addEventListener("selectTile", self)
 
     -- param self:setPlanting, sends entire function through to bulb_ui
-    self.ui = BulbUI(mapWidth, 0, self.width/5, self.height, 10, self.setPlanting)
+    self.ui = BulbUI(self.player, mapWidth, 0, self.width/5, self.height, 10, self.setPlanting)
     -- pass BulbGame obj to our ui on event listener
     self.ui:addEventListener("selectPlant", self)
     self.ui:create(group)
@@ -47,7 +50,10 @@ end
 function BulbGame:selectTile(event)
     print("touch", event.x, event.y)
     if(self.state == "planting") then
-        self.map:plant(event.x, event.y, self.selectedPlantType)
+        if(self.player.itemBag[self.selectedPlantType].inventory >= 1) then
+            self.map:plant(event.x, event.y, self.selectedPlantType)
+            self.player:deductItem(self.selectedPlantType, 1)
+        end
     end
 end
 

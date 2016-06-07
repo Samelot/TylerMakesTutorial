@@ -11,6 +11,7 @@ BulbMap = class(function(c, width, height, rows, columns)
     c.tileSize = c.height/rows
     c.layers = {}
     c.events = {}
+    c.lastTouch = {}
     c.tileGroup = nil
 end)
 
@@ -39,15 +40,28 @@ function BulbMap:plant(i, j, type)
     self.layers[1][i][j]:create(self.tileGroup, type)
 end
 
+function BulbMap:isNewGridTouched(i, j)
+    local returnValue = (i ~= self.lastTouch.i) or (j ~= self.lastTouch.j)
+    return returnValue
+end
+
 function BulbMap:touch(event)
     -- Understand: math
-    selectTileEvent = {
-        name = "selectTile",
-        x = math.floor(event.x / self.tileSize) + 1,
-        y = math.floor(event.y / self.tileSize) + 1
-    }
-    
-    self:dispatchEvent(selectTileEvent)
+    local i = math.floor(event.x / self.tileSize) + 1
+    local j = math.floor(event.y / self.tileSize) + 1
+
+    if(event.phase == "began" or (event.phase == "moved" and self:isNewGridTouched(i, j))) then
+        self.lastTouch = {
+            i = i,
+            j = j
+        }
+        selectTileEvent = {
+            name = "selectTile",
+            x = i,
+            y = j
+        }
+        self:dispatchEvent(selectTileEvent)
+    end
 end
 
 function BulbMap:addEventListener(type, object)
