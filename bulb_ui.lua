@@ -1,6 +1,8 @@
 -- bulb_ui
 require("class")
 require("bulb_store_item")
+require("bulb_store_tool")
+require("bulb_color")
 
 -- SAM plantingFunction
 BulbUI = class(function(c, player, x, y, width, height, itemNumber)
@@ -12,23 +14,34 @@ BulbUI = class(function(c, player, x, y, width, height, itemNumber)
     c.itemNumber = itemNumber
     c.itemHeight = height/itemNumber
     c.items = nil
+    --c.tools = nil
     c.events = {}
 end)
 
 function BulbUI:create(group)
     items = {}
-    for i=1, self.itemNumber do
-        local y = self.y + ((i-1) * self.itemHeight)
-        local bulbStoreItem = BulbStoreItem(self.x, y, self.width, self.itemHeight, i, self.player.itemBag[i].name, self.player.itemBag[i].inventory, self) 
+    --tools = {}
+
+    --local shovel = {tileName = "shovel", color = BulbColor(.6, .4, .4)}
+    --local bulbStoreTools = BulbStoreTool(self.x, self.y + self.itemHeight, self.width, self.itemHeight, shovel, self)
+    --bulbStoreTools:create(group)
+
+    local i = 0
+    for k, v in pairs(self.player.itemBag) do
+        local y = self.y + (i * self.itemHeight)
+        local item = bulbGameSettings:getItemByName(k)
+        local bulbStoreItem = BulbStoreItem(self.x, y, self.width, self.itemHeight, item, self.player.itemBag[item.tileName].inventory, self) 
         bulbStoreItem:create(group)
-        items[#items + 1] = bulbStoreItem
+        items[k] = bulbStoreItem
+        i = i + 1
     end
     self.items = items
+    --self.tools = tools
     self.player:addEventListener("itemUsed", self)
 end
 
 function BulbUI:itemUsed(event)
-    --print("ui:item used:", event.type, event.newValue)
+    print("ui:item used:", event.type, event.newValue)
     self.items[event.type]:updateInventory(event.newValue)
 end
 
@@ -46,10 +59,10 @@ function BulbUI:addEventListener(type, object)
 end
 
 function BulbUI:dispatchEvent(data)
-    
+   
+    print(self.events)
     -- self.events accesses local var in class
     -- c.events = {}
-
     if(self.events[data.name]) then
         for i=1, #self.events[data.name] do
             -- Understand: given that listener, call a function using data.name?? 
@@ -69,11 +82,12 @@ function BulbUI:dispatchEvent(data)
     end
 end
 
-function BulbUI:plantingFunction(itemType)
+function BulbUI:plantingFunction(item)
     plantEvent = {
         name = "selectPlant",
-        type = itemType
+        item = item
     }
-    self:dispatchEvent(plantEvent)
+    BulbUI:dispatchEvent(self, plantEvent)
 end
+
 

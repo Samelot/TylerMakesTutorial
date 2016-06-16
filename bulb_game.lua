@@ -15,7 +15,8 @@ BulbGame = class(function(c, width, height)
     c.player = nil
     c.ui = nil
     c.state = "nothing"
-    c.selectedPlantType = nil
+    c.selectedPlant = nil
+    --c.selectTool = nil
 end)
 
 -- explicit create function, creates and displays
@@ -33,26 +34,41 @@ function BulbGame:create(group)
     self.map:addEventListener("selectTile", self)
 
     -- param self:setPlanting, sends entire function through to bulb_ui
-    self.ui = BulbUI(self.player, mapWidth, 0, self.width/5, self.height, 10, self.setPlanting)
+    self.ui = BulbUI(self.player, mapWidth, 0, self.width/5, self.height, 10)
     -- pass BulbGame obj to our ui on event listener
     self.ui:addEventListener("selectPlant", self)
+    --self.ui:addEventListener("selectTool", self)
     self.ui:create(group)
+
+    Runtime:addEventListener("enterFrame", self)
+end
+
+function BulbGame:enterFrame()
+    self:update()
+end
+
+function BulbGame:update()
+    self.map:update()
 end
 
 -- from dispatchEvent in bulb_ui
-
 function BulbGame:selectPlant(data)
     self.state = "planting"
-    print("selecting:", data.type)
-    self.selectedPlantType = data.type
+    self.selectedPlant = data.item
 end
 
+-- from dispatchEvent in bulb_ui
+--function BulbGame:selectTool(data)
+--    self.state = "tooling"
+--    self.selectedTool = data.type
+--end
+
+-- from dispatchEvent in bulb_map 
 function BulbGame:selectTile(event)
-    print("touch", event.x, event.y)
     if(self.state == "planting") then
-        if(self.player.itemBag[self.selectedPlantType].inventory >= 1) then
-            self.map:plant(event.x, event.y, self.selectedPlantType)
-            self.player:deductItem(self.selectedPlantType, 1)
+        if(self.player.itemBag[self.selectedPlant.tileName].inventory >= 1 and self.map:canPlant(event.x, event.y, self.selectedPlant.tileName)) then
+            self.map:plant(event.x, event.y, self.selectedPlant.tileName)
+            self.player:deductItem(self.selectedPlant.tileName, 1)
         end
     end
 end

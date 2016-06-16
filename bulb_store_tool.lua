@@ -1,8 +1,8 @@
--- bulb_store_item
+-- bulb_store_tool
 
 require("class")
 
-BulbStoreItem = class(function(c, x, y, width, height, item, inventory, ui)
+BulbStoreTool = class(function(c, x, y, width, height, item, ui)
     c.x = x
     c.y = y
     c.width = width
@@ -10,14 +10,11 @@ BulbStoreItem = class(function(c, x, y, width, height, item, inventory, ui)
     c.item = item
     c.ui = ui
     c.name = c.item.tileName
-    c.inventory = inventory
     c.itemView = nil
     c.nameView = nil
-    c.inventoryView = nil
-    --c.events = {}
 end)
 
-function BulbStoreItem:create(group)
+function BulbStoreTool:create(group)
     local itemView = display.newRect(0, 0, self.width, self.height)
     itemView:setFillColor(self.item.color.r, self.item.color.g, self.item.color.b)
     -- anchor set top-left
@@ -50,44 +47,16 @@ function BulbStoreItem:create(group)
     nameView.y = self.y
     self.nameView = nameView
     
-    local inventoryViewOptions = {
-        text = self.inventory,
-        x = 0,
-        y = 0,
-        width = self.width,
-        height = self.height,
-        font = native.systemFont,
-        fontSize = 24,
-        align = "right"
-    }
-    
-    -- Add inventory text
-    local inventoryView = display.newText(inventoryViewOptions)
-    inventoryView:setFillColor(0, 0, 0)
-    -- anchor set top-left
-    inventoryView.anchorX = 0
-    inventoryView.anchorY = 0
-    inventoryView.x = self.x
-    inventoryView.y = self.y
-    self.inventoryView = inventoryView
-    self.itemView = itemView
-    self.itemView:addEventListener("touch", self)
     group:insert(self.itemView)
     group:insert(self.nameView)
-    group:insert(self.inventoryView)
 end
 
-function BulbStoreItem:updateInventory(newValue)
-    self.inventoryView.text = newValue
-    self.inventory = newValue
-end
-
-function BulbStoreItem:touch(event)
+function BulbStoreTool:touch(event)
     local destination = {}
     if (event.phase == "began") then
         destination.x = event.x
         destination.y = event.y
        
-        self.ui:plantingFunction(self.item)
+        self.ui:selectTool(self.name)
     end
 end

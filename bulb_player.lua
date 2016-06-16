@@ -2,16 +2,9 @@ require("class")
 
 BulbPlayer = class(function(c)
     c.itemBag = {}
-    c.itemBag[1] = { name="test1", inventory=5 }
-    c.itemBag[2] = { name="test2", inventory=31 } 
-    c.itemBag[3] = { name="test3", inventory=6 }
-    c.itemBag[4] = { name="test4", inventory=7 }
-    c.itemBag[5] = { name="test5", inventory=46 }
-    c.itemBag[6] = { name="test6", inventory=25 }
-    c.itemBag[7] = { name="test7", inventory=11 }
-    c.itemBag[8] = { name="test8", inventory=18 }
-    c.itemBag[9] = { name="test9", inventory=49 }
-    c.itemBag[10] = { name="test10", inventory=42 }
+    for k, v in pairs(bulbGameSettings.types) do
+        c.itemBag[k] = { name=k, inventory=math.random(30) }
+    end
     c.events = {}
 end)
 
