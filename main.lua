@@ -16,4 +16,4 @@ bulbGameSettings = BulbGameSettings()
 local composer = require "composer"
 
 -- load menu screen
-composer.gotoScene( "bulbasaur_game_scene" )
+composer.gotoScene( "bulb_game_scene" )

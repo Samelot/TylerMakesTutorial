@@ -11,12 +11,25 @@ end)
 function BulbPlayer:deductItem(type, num)
     self.itemBag[type].inventory = self.itemBag[type].inventory - num
     itemUsedEvent = {
-        name = "itemUsed",
+        name = "itemUpdated",
+        status = "deducted",
         type = type,
         newValue = self.itemBag[type].inventory
     }
     self:dispatchEvent(itemUsedEvent)
 end
+
+function BulbPlayer:addItem(type, num)
+    self.itemBag[type].inventory = self.itemBag[type].inventory + num
+    itemUsedEvent = {
+        name = "itemUpdated",
+        status = "added",
+        type = type,
+        newValue = self.itemBag[type].inventory
+    }
+    self:dispatchEvent(itemUsedEvent)
+end
+
 
 function BulbPlayer:addEventListener(type, object)
     --print("type:", type);

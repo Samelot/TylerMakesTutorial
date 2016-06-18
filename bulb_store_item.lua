@@ -91,3 +91,18 @@ function BulbStoreItem:touch(event)
         self.ui:plantingFunction(self.item)
     end
 end
+
+function BulbStoreItem:removeSelf()
+    if(self.nameView) then
+        self.nameView:removeSelf()
+        self.nameView = nil
+    end
+    if(self.inventoryView) then
+        self.inventoryView:removeSelf()
+        self.inventoryView = nil
+    end
+    if(self.itemView) then
+        self.itemView:removeSelf()
+        self.itemView = nil
+    end
+end

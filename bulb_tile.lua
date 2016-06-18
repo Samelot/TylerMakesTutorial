@@ -35,8 +35,8 @@ function BulbTile:create(group, type)
             text = self.harvestCounter,
             x = 0,
             y = 0,
-            width = self.width,
-            height = self.height,
+            width = self.size,
+            height = self.size,
             font = native.systemFont,
             fontSize = 24,
             align = "left"
@@ -60,7 +60,7 @@ function BulbTile:update()
             self.harvestCountView.text = self.harvestCounter
         else
             self.state = "harvestable"
-            self.harvestCountView = "HARVEST"
+            self.harvestCountView.text = "HARVEST"
         end
     end
 end

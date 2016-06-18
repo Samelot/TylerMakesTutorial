@@ -31,6 +31,7 @@ function BulbMap:create(group)
     end
 
     self.tileGroup:addEventListener("touch", self)
+    group:insert(self.tileGroup)
 end
 
 function BulbMap:update()
@@ -52,6 +53,15 @@ function BulbMap:canPlant(i, j, type)
     return self.layers[1][i][j].type == nil
 end
 
+function BulbMap:canHarvest(i, j)
+    return self.layers[1][i][j].state == "harvestable"
+end
+
+function BulbMap:harvest(i, j)
+    local plantType = self.layers[1][i][j].type
+    self:plant(i, j, nil)
+    return plantType
+end
 
 function BulbMap:isNewGridTouched(i, j)
     local returnValue = (i ~= self.lastTouch.i) or (j ~= self.lastTouch.j)
@@ -86,7 +96,6 @@ function BulbMap:addEventListener(type, object)
 end
 
 function BulbMap:dispatchEvent(data)
-    print(self.events[data.name])
     if(self.events[data.name]) then
         for i=1, #self.events[data.name] do
             -- Understand: given that listener, call a function using data.name?? 
